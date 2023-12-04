@@ -22,6 +22,18 @@ export class PokemonService {
     );
   }
 
+  searchePokemonList(term: string): Observable<Pokemon[]>{
+
+    if(term.length < 2 ){
+      return of([]);
+    }
+
+    return this.http.get<Pokemon[]>(`api/pokemons/?name=${term}`).pipe(
+      tap((pokemon) => this.log(pokemon)),
+      catchError((error) => this.handleError(error,[]))
+    );
+  }
+
   updatePokemon(pokemon: Pokemon): Observable<null>{
     const httpOption = {
       headers: new HttpHeaders({
